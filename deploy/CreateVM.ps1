@@ -5,7 +5,7 @@ param
 (
     [string] $RGName,
     [string] $Location,
-    [string] $VHDUri,
+    [string] $VHDUriFile,
     [string] $VMName,
     [string] $Username,
     [string] $Password,
@@ -16,6 +16,24 @@ param
     $cred = New-Object System.Management.Automation.PSCredential ($Username, $securePassword)
 
 try {
+	# Read VHD URI from image.txt file
+	$osDiskUriPrefix = 'OSDiskUri:'
+	$vhdUriFileContent = Get-Content -Path $VHDUriFile
+	$vhdUriFileContent = @($vhdUriFileContent)
+	$VHDUri = $null
+	foreach ($vhdUriFileLine in $vhdUriFileContent) {
+		if ($vhdUriFileLine.StartsWith($osDiskUriPrefix, [StringComparison]::OrdinalIgnoreCase))
+		{
+			$VHDUri = $vhdUriFileLine.Substring($osDiskUriPrefix.Length).Trim()
+		}
+	}
+
+	if ([string]::IsNullOrEmpty($VHDUri)) {
+		throw "VHD URI was not found in image.txt"
+	}
+
+	Write-Output "VHD URI: $VHDUri"
+
     # Create private key for WinRM
     $fullDnsName = "$VMName.$Location.cloudapp.azure.com"
     $tempPath = [System.IO.Path]::GetTempPath()

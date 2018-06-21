@@ -1,4 +1,4 @@
-# Deletes build agent from specified agent pool
+# Deletes build agent from specified agent pool. Agent name can contain wildcards (*).
 
 param
 (
@@ -32,7 +32,7 @@ try {
     $response = Invoke-WebRequest -Uri $url -UseBasicParsing -Headers $headers
     $agents = ConvertFrom-Json -InputObject $response.Content
 
-    $agent = $agents.value | Where-Object { $_.name -eq $AgentName }
+    $agent = $agents.value | Where-Object { $_.name -like $AgentName }
     if ($null -eq $agent) {
         throw "Agent '$AgentName' was not found"
     }
