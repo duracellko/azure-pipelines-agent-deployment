@@ -141,7 +141,7 @@ try {
 
     # Define the image created by Packer
     $imageConfig = New-AzureRmImageConfig -Location $Location
-    $imageConfig = Set-AzureRmImageOsDisk -Image $imageConfig -OsType Windows -OsState Generalized -BlobUri $VHDUri -StorageAccountType PremiumLRS
+    $imageConfig = Set-AzureRmImageOsDisk -Image $imageConfig -OsType Windows -OsState Generalized -BlobUri $VHDUri -StorageAccountType Premium_LRS
     $imageName = $VMName + 'Image'
     $image = New-AzureRmImage -ImageName $imageName -ResourceGroupName $RGName -Image $imageConfig
     Write-Output "Created Image: $($image.Id)"
