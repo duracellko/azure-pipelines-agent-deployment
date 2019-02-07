@@ -38,7 +38,7 @@ try {
         Remove-Item $outputFile -Force
     }
 
-    $packerSourceUrl = 'https://releases.hashicorp.com/packer/1.3.3/packer_1.3.3_windows_amd64.zip'
+    $packerSourceUrl = 'https://releases.hashicorp.com/packer/1.3.4/packer_1.3.4_windows_amd64.zip'
 
     Write-Output "Downloading Packer from $packerSourceUrl"
     [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
