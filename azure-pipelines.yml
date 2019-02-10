@@ -1,0 +1,30 @@
+# Build definition to publish script for deployment of Azure DevOps build agent
+
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    exclude:
+    - README.md
+
+jobs:
+- job: 'BuildScripts'
+  displayName: 'Build Scripts'
+  pool:
+    vmImage: 'win1803'
+  workspace:
+    clean: all
+
+  steps:
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: build'
+    inputs:
+      PathtoPublish: build
+      ArtifactName: build
+  
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: deploy'
+    inputs:
+      PathtoPublish: deploy
+      ArtifactName: deploy
