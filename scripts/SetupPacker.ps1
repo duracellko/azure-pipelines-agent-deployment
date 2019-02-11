@@ -8,16 +8,27 @@ param
     [string] $spClientSecret
 )
 
-Set-AzureRmContext -Subscription $subscriptionId
-New-AzureRmResourceGroup -Name $rgName -Location $location
-New-AzureRmStorageAccount -ResourceGroupName $rgName -AccountName $storageAccountName -Location $location -SkuName "Standard_LRS"
-$sp = New-AzureRmADServicePrincipal -DisplayName $spDisplayName -Password (ConvertTo-SecureString $spClientSecret -AsPlainText -Force)
-$spAppId = $sp.ApplicationId
+$context = Set-AzContext -Subscription $subscriptionId
+
+# Create resource group and storage
+New-AzResourceGroup -Name $rgName -Location $location
+New-AzStorageAccount -ResourceGroupName $rgName -Name $storageAccountName -Location $location -SkuName "Standard_LRS"
+
+# Create service principal and assign role
+$credential = New-Object Microsoft.Azure.Commands.ActiveDirectory.PSADPasswordCredential
+$credential.Password = $spClientSecret
+$credential.StartDate = [System.DateTime]::UtcNow
+$credential.EndDate = $credential.StartDate.AddYears(10)
+$sp = New-AzADServicePrincipal -DisplayName $spDisplayName -PasswordCredential $credential
+
+$scope = '/subscriptions/' + $context.Subscription.Id
 $spClientId = $sp.ApplicationId
 $spObjectId = $sp.Id
 Start-Sleep 40
-New-AzureRmRoleAssignment -RoleDefinitionName Contributor -ServicePrincipalName $spAppId
-$sub = Get-AzureRmSubscription -SubscriptionId $subscriptionId
+New-AzRoleAssignment -ObjectId $spObjectId -RoleDefinitionName Contributor -Scope $scope
+
+# Output result
+$sub = Get-AzSubscription -SubscriptionId $subscriptionId
 $tenantId = $sub.TenantId
 $result = @(
     ""
