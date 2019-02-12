@@ -29,7 +29,7 @@ This task publishes scripts from this repository, so they are available for othe
 
 12. Click **Continue**.
 13. Select **YAML** and click **Apply**.
-14. Enter name following values
+14. Enter following values
     - **Name**: _Build scripts_
     - **Agent pool**: Hosted Windows Container
     - **YAML file path**: azure-pipelines.yml
@@ -46,7 +46,7 @@ This task publishes scripts from this repository, so they are available for othe
 
 ![New Azure Resource Manager service connection](images/Setup_Azure_DevOps_project_New_Azure_service_connection.png)
 
-4. You can uncheck **Allow all pipelines to use this connection.** as this is not needed in our scenario.
+4. You can uncheck **Allow all pipelines to use this connection** as this is not needed in our scenario.
 5. Select **Service Principal Authentication**.
 6. Click **use the full version of the service connection dialog**. Dialog with all options is displayed.
 7. Enter following values:
@@ -113,7 +113,7 @@ This task publishes scripts from this repository, so they are available for othe
 ![Create Personal Access Token](images/Setup_Azure_DevOps_project_Personal_Access_Token.png)
 
 21. Click **Create**.
-22. Save create token for later use.
+22. Save created token for later use.
 23. From menu select **Pipelines** then **Library**.
 24. Open **Variable groups**.
 25. Create new variable group named **Azure DevOps Account** with following values:

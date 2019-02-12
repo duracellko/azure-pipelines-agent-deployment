@@ -25,10 +25,10 @@ There might be situations, when it's not possible to use Microsoft hosted agents
 - Agent must have pre-installed certification keys. (bad practice)
 - Your product must comply with regulations of complete reproducibility. It means that every build of your software must be reproducible by using exactly same version of tools, operating system and patches. This is not possible with Microsoft hosted agents, because they are upgraded every month.
 
-In such case, you have to maintain your self-hosted agent by yourself. And this is what you need:
+In such case, you have to maintain your self-hosted agent by yourself. And this is what you need before start:
 
-1. Azure DevOps organization - I assume, you already have this, and therefore you need build agent.
-2. Azure subscription - This article helps you deploy agent in Microsoft Azure. If you want to use different cloud provider or own datacenter you may use some scripts from here, but some parts must be implemented by yourself.
+1. Azure DevOps organization - I assume, you already have this. And therefore you need a build agent.
+2. Azure subscription - This article helps you to deploy agent in Microsoft Azure. If you want to use different cloud provider or own datacenter you may use some scripts from here, but some parts must be implemented by yourself.
 
 And these are tasks to setup automated deployment of self-hosted build agent.
 

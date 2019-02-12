@@ -1,17 +1,17 @@
 # Create build agent image
 
-In previous steps we setup all required connections and credentials, so that we can build virtual machine image of our build agent.
+In previous steps you setup all required connections and credentials, so that you can build virtual machine image of your build agent.
 
 ## Build agent configuration
 
-Microsoft hosted agents images are built automatically and microsoft open-sourced the configuration scripts in [GitHub repository](https://github.com/Microsoft/azure-pipelines-image-generation). This is very good starting point and we can use the same scripts. Optionally we can modify those to change some software installation or configuration.
+Microsoft hosted agents images are built automatically and microsoft open-sourced the configuration scripts in [GitHub repository](https://github.com/Microsoft/azure-pipelines-image-generation). This is very good starting point and you can use the same scripts. Optionally you can modify those to change some software installation or configuration.
 
 Microsoft uses [Packer](https://www.packer.io/) to build agent image. Packer is nice tool for building virtual machine images. It works with [Azure](https://azure.microsoft.com/), [AWS](https://aws.amazon.com/), [Google Cloud](https://cloud.google.com/), [Hyper-V](https://www.microsoft.com/en-us/server-cloud/solutions/virtualization.aspx), [VMware](https://www.vmware.com/), and many more. Basically it does following steps:
 1. Starts a new virtual machine.
 2. Executes steps specified in JSON template.
-3. Stops the virtual machine and saves image.
+3. Stops the virtual machine and saves it to an image.
 
-At the GitHub repo there are several images. We will build **Hosted 2017** that is defined in template file _images/win/vs2017-Server2016-Azure.json_. At first fork the whole repository at GitHub, where you will manage your changes. This way, when Microsoft releases new version of the template, you can easily merge into your repository. Microsoft stores releases in branches _releases/YYMM_. Find the latest release and checkout your own branch. Now you can do changes in the template. First section in the template JSON defines, where the image is created. It is created in Microsoft Azure in specified subscription and resource group.
+At the GitHub repo there are several images. This article focuses on **Hosted 2017** that is defined in template file _images/win/vs2017-Server2016-Azure.json_. At first fork the whole repository at GitHub, where you will manage your changes. This way, when Microsoft releases a new version of the template, you can easily merge it into your repository. Microsoft stores releases in branches _releases/YYMM_. Find the latest release and checkout your own branch. Now you can do changes in the template. First section in the template JSON defines, where the image is created. It is created in Microsoft Azure in specified subscription and resource group.
 
 To make installation more secure remove the hardcoded password. Find line
 ```json
@@ -23,6 +23,8 @@ and replace it with line
 ```
 
 Second section defines set of PowerShell scripts, which are executed and install and verify software on the build agent. Configuration of full build agent takes more than 8 hours. Therefore I recommend that you remove installation steps, which you don't need.
+
+Example of modified Packer configuration can be found in repository [duracellko/azure-pipelines-image-generation](https://github.com/duracellko/azure-pipelines-image-generation/tree/duracellko/1901.1/images/win).
 
 ## Create build pipeline
 
@@ -81,15 +83,15 @@ When you commit all the changes and push the branch to GitHub, you are ready to 
     - **Specific artifact**
     - **Artifact name**: build
     - **Matching pattern**: **
-    - **Destination directory**: $(Build.BinariesDirectory)\scripts
+    - **Destination directory**: `$(Build.BinariesDirectory)\scripts`
 
 ![Download Build Scripts](images/Create_build_agent_image_Download_Build_Scripts.png)
 
 15. Click **Add task** and select **Copy Files**. Then set following values:
     - **Display name**: Copy Files - Build Scripts
-    - **Source Folder**: $(Build.BinariesDirectory)\scripts\build
+    - **Source Folder**: `$(Build.BinariesDirectory)\scripts\build`
     - **Contents**: **
-    - **Target Folder**: $(System.DefaultWorkingDirectory)\scripts
+    - **Target Folder**: `$(System.DefaultWorkingDirectory)\scripts`
     - **Clean Target Folder**: checked
     - **Overwrite**: checked
 
@@ -98,7 +100,7 @@ When you commit all the changes and push the branch to GitHub, you are ready to 
 16. Click **Add task** and select **PowerShell**. Then set following values:
     - **Display name**: PowerShell Script
     - **File Path**
-    - **Script Folder**: scripts/BuildImage.ps1
+    - **Script Folder**: `scripts/BuildImage.ps1`
     - **Arguments**: `-SPClientId "$(Azure.ClientId)" -SPClientSecret "$(Azure.ClientSecret)" -SubscriptionId "$(Azure.SubscriptionId)" -TenantId "$(Azure.TenantId)" -Location "$(Azure.Location)" -RGName "$(Azure.ResourceGroup)" -StorageAccountName "$(Azure.StorageAccountName)" -InstallPassword "$(PackerVMInstallPassword)"`
     - **ErrorActionPreference**: Stop
 
@@ -106,13 +108,13 @@ When you commit all the changes and push the branch to GitHub, you are ready to 
 
 17. Click **Add task** and select **Copy Files**. Then set following values:
     - **Display name**: Copy Files - VHD URI
-    - **Source Folder**: $(Build.BinariesDirectory)
+    - **Source Folder**: `$(Build.BinariesDirectory)`
     - **Contents**:
         ```
         *.txt
         *.md
         ```
-    - **Target Folder**: $(Build.StagingDirectory)\image
+    - **Target Folder**: `$(Build.StagingDirectory)\image`
     - **Clean Target Folder**: unchecked
     - **Overwrite**: unchecked
 
@@ -120,7 +122,7 @@ When you commit all the changes and push the branch to GitHub, you are ready to 
 
 18. Click **Add task** and select **Publish Build Artifacts**. Then set following values:
     - **Display Name**: Publish Artifact: image
-    - **Path to publish**: $(Build.StagingDirectory)\image
+    - **Path to publish**: `$(Build.StagingDirectory)\image`
     - **Artifact name**: image
     - **Artifact publish location**: Azure Pipelines/TFS
 
@@ -129,6 +131,6 @@ When you commit all the changes and push the branch to GitHub, you are ready to 
 19. **Save** the pipeline.
 20. Queue the build. Do not forget to specify branch that you want to build.
 
-After several hours a disk image (VHD file) should be stored in the Azure Storage that you created in the first task.
+After several hours a disk image (VHD file) should be created and stored in the Azure Storage that you created in the first task.
 
 Next step: [Deploy build agent](Deploy_build_agent.md)

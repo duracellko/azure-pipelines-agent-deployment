@@ -1,6 +1,6 @@
 # Deploy build agent
  
-Now the build agent VM image is built and stored in Azure Storage. The last step is to deploy the agent into Azure DevOps Release Pipeline.
+Now the build agent VM image is built and stored in Azure Storage. The last step is to deploy the agent using Azure DevOps Release Pipeline.
 
 1. From menu select **Pipelines** then **Releases**.
 2. Click **New release pipeline**.
