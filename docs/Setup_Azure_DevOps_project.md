@@ -50,7 +50,7 @@ This task publishes scripts from this repository, so they are available for othe
 5. Select **Service Principal Authentication**.
 6. Click **use the full version of the service connection dialog**. Dialog with all options is displayed.
 7. Enter following values:
-    - **Connection name**: Azure build
+    - **Connection name**: Azure Build
     - **Environment**: AzureCloud
     - **Scope level**: Subscription
     - **Subscription ID**: Subscription ID of your Azure subscription.

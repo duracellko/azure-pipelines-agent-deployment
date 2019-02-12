@@ -2,7 +2,9 @@
 
 This article and set of scripts can help you setup fully automated deployment of [Azure DevOps](https://azure.microsoft.com/en-us/solutions/devops/) build agents. It explains step-by-step instructions, how to setup automated deployment of [self-hosted agent](https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/agents?view=azure-devops#install) using [Azure DevOps Pipelines](https://docs.microsoft.com/en-us/azure/devops/pipelines/?view=azure-devops).
 
-[VSTS/TFS automated build agent provisioning](https://www.betterask.erni/news-room/vsts-tfs-automated-build-agent-provisioning/)
+This repository is based on article [VSTS/TFS automated build agent provisioning](https://www.betterask.erni/news-room/vsts-tfs-automated-build-agent-provisioning/).
+
+Please, feel free to use this repository or any parts of the scripts in here. All is licensed under MIT license.
 
 # Problem
 
@@ -34,3 +36,9 @@ And these are tasks to setup automated deployment of self-hosted build agent.
 2. [Setup Azure DevOps project](docs/Setup_Azure_DevOps_project.md)
 3. [Create build agent image](docs/Create_build_agent_image.md)
 4. [Deploy build agent](docs/Deploy_build_agent.md)
+
+After the automated deployment is setup, it is very easy to upgrade or redeploy the build agent. At first upgrade configuration source code for Packer. Then queue new build _Build Agent Image_. And in the end create new release _Azure DevOps Build Agent_.
+
+# Feedback
+
+Feedback is very welcome. Feel free to post an Issue in this repository if you have any question, idea, or improvement.
