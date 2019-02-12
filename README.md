@@ -37,7 +37,7 @@ And these are tasks to setup automated deployment of self-hosted build agent.
 3. [Create build agent image](docs/Create_build_agent_image.md)
 4. [Deploy build agent](docs/Deploy_build_agent.md)
 
-After the automated deployment is setup, it is very easy to upgrade or redeploy the build agent. At first upgrade configuration source code for Packer. Then queue new build _Build Agent Image_. And in the end create new release _Azure DevOps Build Agent_.
+After the automated deployment is setup, it is very easy to upgrade or redeploy the build agent. At first upgrade the configuration source code for Packer. Then queue new build _Build Agent Image_. And in the end create new release _Azure DevOps Build Agent_.
 
 # Feedback
 
