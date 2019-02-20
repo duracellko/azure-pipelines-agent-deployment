@@ -1,6 +1,6 @@
 # Setup Azure Resource Group
 
-Microsoft Azure is used for 2 things:
+First step is to setup environment for the build agent. Microsoft Azure is used for 2 things:
 
 1. Virtual Machine running Azure DevOps build agent
 2. Azure Storage to store disk images of the Virtual Machine
@@ -16,7 +16,7 @@ Both will be in single Azure Resource Group. Additionally it is needed to setup 
 - **spDisplayName** - Display name of Azure Active Directory Service Principal that will be created to access the Azure Resource Group.
 - **spClientSecret** - Password of the Azure Active Directory Service Principal. This value must be kept secret.
 
-The script uses [Azure PowerShell](https://docs.microsoft.com/en-us/powershell/azure/overview?view=azps-1.2.0). Follow [installation instructions](https://docs.microsoft.com/en-us/powershell/azure/install-az-ps?view=azps-1.2.0) for Azure PowerShell. Then you can run the script like this:
+The script uses [Azure PowerShell](https://docs.microsoft.com/en-us/powershell/azure/overview?view=azps-1.2.0). Follow [installation instructions](https://docs.microsoft.com/en-us/powershell/azure/install-az-ps?view=azps-1.2.0) for Azure PowerShell. When Azure PowerShell is installed, then you can run the script like this:
 
 ```PowerShell
 # Login to Azure subscription interactively

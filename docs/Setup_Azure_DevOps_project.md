@@ -1,5 +1,7 @@
 # Setup Azure DevOps project
 
+When Azure resource group and environment is setup, next step is to configure all Azure DevOps project requirements for build and release pipelines. This includes repository, service endpoints, build variables.
+
 ## 1. Publish build scripts
 
 This task publishes scripts from this repository, so they are available for other Azure Pipelines.

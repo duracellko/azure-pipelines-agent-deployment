@@ -28,7 +28,7 @@ Example of modified Packer configuration can be found in repository [duracellko/
 
 ## Create build pipeline
 
-When you commit all the changes and push the branch to GitHub, you are ready to create Azure Pipeline to build the image.
+When you commit all the changes and push the branch to GitHub, you are ready to create Azure Pipeline to build the image. The build is very simple, it just runs Packer to build the image.
 
 1. In Azure DevOps select **Pipelines** from menu and then **Builds**.
 2. Click **New build pipeline**.
@@ -131,6 +131,6 @@ When you commit all the changes and push the branch to GitHub, you are ready to 
 19. **Save** the pipeline.
 20. Queue the build. Do not forget to specify branch that you want to build.
 
-After several hours a disk image (VHD file) should be created and stored in the Azure Storage that you created in the first task.
+After several hours a disk image (VHD file) should be created and stored in the Azure Storage that you created in the first task. Additionally build artifacts contain markdown file with all installed software.
 
 Next step: [Deploy build agent](Deploy_build_agent.md)

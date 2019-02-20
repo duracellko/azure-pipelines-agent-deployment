@@ -32,6 +32,8 @@ In such case, you have to maintain your self-hosted agent by yourself. And this 
 
 And these are tasks to setup automated deployment of self-hosted build agent.
 
+> Please, be aware that instructions and screenshots were done using Azure DevOps preview feature "New YAML pipeline creation experience". When you don't have this feature, build visual designer is automatically shown and there is no need to switch.
+
 1. [Setup Azure Resource Group](docs/Setup_Azure_Resource_Group.md)
 2. [Setup Azure DevOps project](docs/Setup_Azure_DevOps_project.md)
 3. [Create build agent image](docs/Create_build_agent_image.md)

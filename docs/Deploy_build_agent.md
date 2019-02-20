@@ -1,6 +1,12 @@
 # Deploy build agent
  
-Now the build agent VM image is built and stored in Azure Storage. The last step is to deploy the agent using Azure DevOps Release Pipeline.
+Now the build agent VM image is built and stored in Azure Storage. The last step is to deploy the agent using Azure DevOps Release Pipeline. The release has 3 jobs:
+
+1. It creates new Azure Virtual Machine from image created by _Build Agent Image_. Additionally it removes other resources in case previous deployment failed.
+2. It removes existing build agent from Azure DevOps pool. Then it installs Azure DevOps agent on the new virtual machine.
+3. It deletes Azure Virtual Machine running previous build agent.
+
+## Setup release pipeline
 
 1. From menu select **Pipelines** then **Releases**.
 2. Click **New release pipeline**.
