@@ -10,10 +10,31 @@ param
     [string] $Username,
     [string] $Password,
     [string] $ServicePrincipalObjectId,
-	[string] $VMSize = 'Standard_B2S'
+    [string] $VMSize = 'Standard_B2S'
 )
-    $securePassword = ConvertTo-SecureString -String $Password -AsPlainText -Force
-    $cred = New-Object System.Management.Automation.PSCredential ($Username, $securePassword)
+
+function GenerateRandomPassword([int] $Length = 32) {
+    $rng = $null
+
+    try {
+        $rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
+        $buffer = [byte[]]::new($Length)
+        $rng.GetBytes($buffer)
+        $password = [System.Convert]::ToBase64String($buffer)
+        return $password.Substring(0, $Length)
+    }
+    catch {
+        throw
+    }
+    finally {
+        if ($null -ne $rng) {
+            $rng.Dispose()
+        }
+    }
+}
+
+$securePassword = ConvertTo-SecureString -String $Password -AsPlainText -Force
+$cred = New-Object System.Management.Automation.PSCredential ($Username, $securePassword)
 
 try {
 	# Read VHD URI from image.txt file
@@ -38,7 +59,7 @@ try {
     $fullDnsName = "$VMName.$Location.cloudapp.azure.com"
     $tempPath = [System.IO.Path]::GetTempPath()
     $privateKeyPath = Join-Path $tempPath "WinRM.pfx"
-    $privateKeyPasswordPlain = (New-Guid).ToString('n')
+    $privateKeyPasswordPlain = GenerateRandomPassword
     $privateKeyPassword = ConvertTo-SecureString -String $privateKeyPasswordPlain -AsPlainText -Force
     $privateKey = New-SelfSignedCertificate -DnsName $fullDnsName -CertStoreLocation 'Cert:\CurrentUser\My'
     Export-PfxCertificate -Cert $privateKey -FilePath $privateKeyPath -Password $privateKeyPassword -Force
