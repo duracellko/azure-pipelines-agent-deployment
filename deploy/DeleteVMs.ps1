@@ -3,7 +3,8 @@
 param
 (
     [string] $RGName,
-    [string[]] $ExceptVMs
+    [string[]] $ExceptVMs,
+    [bool] $RemovePublicAccess = $false
 )
 
 function ShouldRemoveResource([string] $name, [string[]] $excludeVMs) {
@@ -14,6 +15,36 @@ function ShouldRemoveResource([string] $name, [string[]] $excludeVMs) {
     }
 
     return $true
+}
+
+function CointainsPort([System.Collections.Generic.IList[string]] $portRange, [int] $port) {
+    $integerStyle = [System.Globalization.NumberStyles]::Integer
+    $invariantCulture = [System.Globalization.CultureInfo]::InvariantCulture
+    foreach ($rangePort in $portRange) {
+        [int] $portValue = 0
+        if ([int]::TryParse($rangePort, $integerStyle, $invariantCulture, [ref] $portValue)) {
+            if ($portValue -eq $port) {
+                return $true
+            }
+        }
+    }
+
+    return $false
+}
+
+# Unlink public IPs from NICs
+if ($RemovePublicAccess) {
+    Write-Output "Removing public IP links from NICs."
+    $networkInterfaces = Get-AzureRmNetworkInterface -ResourceGroupName $RGName
+    foreach ($networkInterface in $networkInterfaces) {
+        Write-Output "Inspecting network interface: $($networkInterfaces.Name)"
+        foreach ($ipConfiguration in $networkInterface.IpConfigurations) {
+            Write-Output "Updating IP configuration: $($ipConfiguration.Name)"
+            $ipConfiguration.PublicIpAddress = $null
+        }
+
+        Set-AzureRmNetworkInterface -NetworkInterface $networkInterface | Out-Null
+    }
 }
 
 # Delete virtual machines
@@ -39,7 +70,9 @@ foreach ($NIC in $NICs) {
 Write-Output "Searching for public IP addresses."
 
 $publicIPs = Get-AzureRmPublicIpAddress -ResourceGroupName $RGName
-$publicIPs = $publicIPs | Where-Object { ShouldRemoveResource -name $_.Name -excludeVMs $ExceptVMs }
+if (-not $RemovePublicAccess) {
+    $publicIPs = $publicIPs | Where-Object { ShouldRemoveResource -name $_.Name -excludeVMs $ExceptVMs }
+}
 foreach ($publicIP in $publicIPs) {
     Write-Output "Removing public IP address: $($publicIP.Name)"
     Remove-AzureRmPublicIpAddress -ResourceGroupName $RGName -Name $publicIP.Name -Force
@@ -88,4 +121,22 @@ $images = $images | Where-Object { ShouldRemoveResource -name $_.Name -excludeVM
 foreach ($image in $images) {
     Write-Output "Removing image: $($image.Name)"
     Remove-AzureRmImage -ResourceGroupName $RGName -Name $image.Name -Force
+}
+
+# Remove all network security rules with destination port 5986
+$port = 5986
+
+if ($RemovePublicAccess) {
+    Write-Output "Removing network security rules with destination port $port."
+    $networkSecurityGroups = Get-AzureRmNetworkSecurityGroup -ResourceGroupName $RGName
+    foreach ($networkSecurityGroup in $networkSecurityGroups) {
+        Write-Output "Inspecting network group: $($networkSecurityGroup.Name)"
+        $ruleConfigs = Get-AzureRmNetworkSecurityRuleConfig -NetworkSecurityGroup $networkSecurityGroup
+        $ruleConfigs = $ruleConfigs | Where-Object { $_.Access -eq 'Allow' -and (CointainsPort -portRange $_.DestinationPortRange -port $port) }
+        foreach ($ruleConfig in $ruleConfigs) {
+            Write-Output "Removing network security rule: $($ruleConfig.Name)"
+            $networkSecurityGroup = Remove-AzureRmNetworkSecurityRuleConfig -NetworkSecurityGroup $networkSecurityGroup -Name $ruleConfig.Name
+            Set-AzureRmNetworkSecurityGroup -NetworkSecurityGroup $networkSecurityGroup | Out-Null
+        }
+    }
 }
