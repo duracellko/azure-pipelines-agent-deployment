@@ -9,6 +9,8 @@ trigger:
     - README.md
     - docs/**
 
+pr: none
+
 jobs:
 - job: 'BuildScripts'
   displayName: 'Build Scripts'

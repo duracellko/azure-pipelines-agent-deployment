@@ -8,7 +8,6 @@ param
     [string] $Password,
     [string] $VstsUrl,
     [string] $PAT,
-    [string] $VSTSAgentUrl,
     [string] $AgentPool = 'default'
 )
 
@@ -18,6 +17,22 @@ $cred = New-Object System.Management.Automation.PSCredential ($Username, $secure
 $session = $null
 
 try {
+    # Construct authorization header for Azure DevOps REST API
+    $PATenc = [System.Text.Encoding]::ASCII.GetBytes(':' + $PAT)
+    $PATenc = [System.Convert]::ToBase64String($PATenc)
+    $headers = @{ Authorization = "Basic $PATenc" }
+
+    # Automatically detect Azure DevOps agent download URL
+    Write-Output "Searching for Azure DevOps download URL."
+    $url = $VstsUrl + '_apis/distributedtask/packages/agent?platform=win-x64'
+    $response = Invoke-WebRequest -Uri $url -UseBasicParsing -Headers $headers
+    $packages = ConvertFrom-Json -InputObject $response.Content
+    $packages = $packages.value | Sort-Object -Property @({ $_.version.major }, { $_.version.minor }, { $_.version.patch }) -Descending
+    $package = $packages | Select-Object -First 1
+    $VSTSAgentUrl = $package.downloadUrl
+
+    Write-Output "Azure DevOps agent URL: $VSTSAgentUrl"
+
     # Get VM IP address
     $vm = Get-AzureRmVM -ResourceGroupName $RGName -Name $VMName
     $nicId = $vm.NetworkProfile.NetworkInterfaces.Id
