@@ -120,7 +120,7 @@ Now the build agent VM image is built and stored in Azure Storage. The last step
     - **Azure Subscription**: Azure Build
     - **Script Type**: Script File Path
     - **Script Path**: `$(System.DefaultWorkingDirectory)/BuildScripts/deploy/InstallAgent.ps1`
-    - **Script Arguments**: `-RGName "$(Azure.ResourceGroup)" -VMName "$(Azure.VirtualMachinePrefix)$(Release.ReleaseId)R" -Username "$(BuildAgent.Username)" -Password "$(BuildAgent.Password)" -VstsUrl "$(System.TeamFoundationCollectionUri)" -PAT "$(ADOAccount.PAT)" -VSTSAgentUrl "$(ADOAccount.AgentUrl)"`
+    - **Script Arguments**: `-RGName "$(Azure.ResourceGroup)" -VMName "$(Azure.VirtualMachinePrefix)$(Release.ReleaseId)R" -Username "$(BuildAgent.Username)" -Password "$(BuildAgent.Password)" -VstsUrl "$(System.TeamFoundationCollectionUri)" -PAT "$(ADOAccount.PAT)"`
     - **ErrorActionPreference**: Stop
     - **Azure PowerShell Version**: Latest installed version
 
@@ -156,7 +156,7 @@ Now the build agent VM image is built and stored in Azure Storage. The last step
     - **Azure Subscription**: Azure Build
     - **Script Type**: Script File Path
     - **Script Path**: `$(System.DefaultWorkingDirectory)/BuildScripts/deploy/DeleteVMs.ps1`
-    - **Script Arguments**: `-RGName "$(Azure.ResourceGroup)" -ExceptVMs @("$(Agent.MachineName)")`
+    - **Script Arguments**: `-RGName "$(Azure.ResourceGroup)" -ExceptVMs @("$(Agent.MachineName)") -RemovePublicAccess:$true`
     - **ErrorActionPreference**: Stop
     - **Azure PowerShell Version**: Latest installed version
 
