@@ -96,51 +96,42 @@ This task publishes scripts from this repository, so they are available for othe
 ![Variable group - Azure resources](images/Setup_Azure_DevOps_project_Variable_group_Azure_resources.png)
 
 8. Click **Save**.
-9. In menu open **Project settings** and then **Agent pools**.
-10. Select _Default_ pool.
-11. Click **Download agent**.
-12. Select **Windows** and then **x64**.
-13. Click **Copy URL to clipboard** button next to **Download**. Save the URL for later user.
-
-![Download agent](images/Setup_Azure_DevOps_project_Download_agent.png)
-
-14. Click user icon in upper right corner and select **Security**.
-15. Select **Personal access tokens**.
-16. Click **New Token**.
-17. Set **Name** to "BuildAgent".
-18. Set **Expiration** to 90 days.
-19. Click **Show all scopes**.
-20. Check **Agent Pools - Read & manage**.
+9. Click user icon in upper right corner and select **Security**.
+10. Select **Personal access tokens**.
+11. Click **New Token**.
+12. Set **Name** to "BuildAgent".
+13. Set **Expiration** to 90 days.
+14. Click **Show all scopes**.
+15. Check **Agent Pools - Read & manage**.
 
 ![Create Personal Access Token](images/Setup_Azure_DevOps_project_Personal_Access_Token.png)
 
-21. Click **Create**.
-22. Save created token for later use.
-23. From menu select **Pipelines** then **Library**.
-24. Open **Variable groups**.
-25. Create new variable group named **Azure DevOps Account** with following values:
+16. Click **Create**.
+17. Save created token for later use.
+18. From menu select **Pipelines** then **Library**.
+19. Open **Variable groups**.
+20. Create new variable group named **Azure DevOps Account** with following values:
 
 | Name                | Value                                      | Hidden |
 |---------------------|--------------------------------------------|--------|
-| ADOAccount.AgentUrl | Download agent URL obtained in step 13.    |        |
-| ADOAccount.PAT      | Personal Access Token obtained in step 22. | true   |
+| ADOAccount.PAT      | Personal Access Token obtained in step 17. | true   |
 
-26. You can uncheck **Allow access to all pipelines** as this is not needed in our scenario.
+21. You can uncheck **Allow access to all pipelines** as this is not needed in our scenario.
 
 ![Variable group - Azure DevOps account](images/Setup_Azure_DevOps_project_Variable_group_Azure_DevOps_account.png)
 
-27. Click **Save**.
-25. Create new variable group named **Build Agent properties** with following values:
+22. Click **Save**.
+23. Create new variable group named **Build Agent properties** with following values:
 
 | Name                | Value                                          | Hidden |
 |---------------------|------------------------------------------------|--------|
 | BuildAgent.Password | Password of admin user created on build agent. | true   |
 | BuildAgent.Username | Username of admin user created on build agent. |        |
 
-26. You can uncheck **Allow access to all pipelines** as this is not needed in our scenario.
+24. You can uncheck **Allow access to all pipelines** as this is not needed in our scenario.
 
 ![Variable group - Build Agent properties](images/Setup_Azure_DevOps_project_Variable_group_Build_agent.png)
 
-27. Click **Save**.
+25. Click **Save**.
 
 Next step: [Create build agent image](Create_build_agent_image.md)

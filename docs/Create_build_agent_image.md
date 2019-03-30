@@ -15,7 +15,7 @@ At the GitHub repo there are several images. This article focuses on **Hosted 20
 
 To make installation more secure remove the hardcoded password. Find line
 ```json
-    "install_password": "P@ssw0rd1"
+    "install_password": null
 ```
 and replace it with line
 ```json
@@ -53,10 +53,6 @@ When you commit all the changes and push the branch to GitHub, you are ready to 
 ![Get sources](images/Create_build_agent_image_Get_sources.png)
 
 10. Select **Variables** section.
-    1. Add variable named **PackerVMInstallPassword**. This will be password of user that will install software on the agent. This password is used in legacy commands and therefore maximum length is 16 characters.
-
-![Variables](images/Create_build_agent_image_Variables.png)
-
 11. Open **Variable groups** section.
     1. Click **Link variable group**.
     2. Select **Azure subscription** group and click **Link**.
@@ -101,7 +97,7 @@ When you commit all the changes and push the branch to GitHub, you are ready to 
     - **Display name**: PowerShell Script
     - **File Path**
     - **Script Folder**: `scripts/BuildImage.ps1`
-    - **Arguments**: `-SPClientId "$(Azure.ClientId)" -SPClientSecret "$(Azure.ClientSecret)" -SubscriptionId "$(Azure.SubscriptionId)" -TenantId "$(Azure.TenantId)" -Location "$(Azure.Location)" -RGName "$(Azure.ResourceGroup)" -StorageAccountName "$(Azure.StorageAccountName)" -InstallPassword "$(PackerVMInstallPassword)"`
+    - **Arguments**: `-SPClientId "$(Azure.ClientId)" -SPClientSecret "$(Azure.ClientSecret)" -SubscriptionId "$(Azure.SubscriptionId)" -TenantId "$(Azure.TenantId)" -Location "$(Azure.Location)" -RGName "$(Azure.ResourceGroup)" -StorageAccountName "$(Azure.StorageAccountName)"`
     - **ErrorActionPreference**: Stop
 
 ![PowerShell Script](images/Create_build_agent_image_PowerShell_Script.png)
