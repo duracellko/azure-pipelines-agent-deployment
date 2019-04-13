@@ -18,6 +18,8 @@ Now the build agent VM image is built and stored in Azure Storage. The last step
 | Azure.ServicePrincipalObjectId | Value of $spClientId returned by _SetupPacker.ps1_ script. | true   | Release |
 | Azure.VirtualMachinePrefix     | Prefix that will be added to VM name. For example, when prefix is _VSBuild1V_, then VM is named VSBuild1V*X*R (X is release number). |        | Release |
 
+> Note: Virtual Machine Prefix can contain only letters, numbers, and '-', and must have no more than 12 characters.
+
 ![Release variables](images/Deploy_build_agent_Variables.png)
 
 5. Open **Variable groups** and link following variable groups: Azure resources, Build Agent properties, Azure DevOps Account

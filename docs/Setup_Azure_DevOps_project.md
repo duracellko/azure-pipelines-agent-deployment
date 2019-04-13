@@ -128,6 +128,8 @@ This task publishes scripts from this repository, so they are available for othe
 | BuildAgent.Password | Password of admin user created on build agent. | true   |
 | BuildAgent.Username | Username of admin user created on build agent. |        |
 
+> Note: Please, follow [requirements for username and password](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/faq#what-are-the-username-requirements-when-creating-a-vm).
+
 24. You can uncheck **Allow access to all pipelines** as this is not needed in our scenario.
 
 ![Variable group - Build Agent properties](images/Setup_Azure_DevOps_project_Variable_group_Build_agent.png)
